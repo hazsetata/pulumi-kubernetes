@@ -17,17 +17,22 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Text.Json.Serialization;
 using Pulumi.Kubernetes.Yaml;
 
 namespace Pulumi.Kubernetes.Helm
 {
     internal class BaseChartArgsUnwrap
     {
+        [JsonPropertyName("api_versions")]
         public ImmutableArray<string> ApiVersions { get; set; }
         public string? Namespace { get; set; }
         public ImmutableDictionary<string, object> Values { get; set; } = null!;
         public List<TransformationAction> Transformations { get; set; } = null!;
+        [JsonPropertyName("resource_prefix")]
         public string? ResourcePrefix { get; set; }
+        [JsonPropertyName("release_name")]
+        public string ReleaseName { get; set; } = null!;
     }
 
     internal class ChartArgsUnwrap : BaseChartArgsUnwrap
@@ -35,6 +40,7 @@ namespace Pulumi.Kubernetes.Helm
         public string? Repo { get; set; }
         public string Chart { get; set; } = null!;
         public string? Version { get; set; }
+        [JsonPropertyName("fetch_opts")]
         public ChartFetchArgsUnwrap? FetchOptions { get; set; }
     }
 
@@ -42,17 +48,21 @@ namespace Pulumi.Kubernetes.Helm
     {
         public string Path { get; set; } = null!;
     }
-    
-    internal class ChartFetchArgsUnwrap 
+
+    internal class ChartFetchArgsUnwrap
     {
         public string? Version { get; set; }
+        [JsonPropertyName("ca_file")]
         public string? CAFile { get; set; }
+        [JsonPropertyName("cert_file")]
         public string? CertFile { get; set; }
+        [JsonPropertyName("key_file")]
         public string? KeyFile { get; set; }
         public string? Destination { get; set; }
         public string? Keyring { get; set; }
         public string? Password { get; set; }
         public string? Repo { get; set; }
+        [JsonPropertyName("untar_dir")]
         public string? UntarDir { get; set; }
         public string? Username { get; set; }
         public string? Home { get; set; }
@@ -61,7 +71,7 @@ namespace Pulumi.Kubernetes.Helm
         public bool? Untar { get; set; }
         public bool? Verify { get; set; }
     }
-    
+
     internal static class Extensions
     {
         public static Output<Union<ChartArgsUnwrap, LocalChartArgsUnwrap>> Unwrap(this Union<ChartArgs, LocalChartArgs> options)
@@ -90,7 +100,7 @@ namespace Pulumi.Kubernetes.Helm
                             Values = vs.Item3,
                             Transformations = v.Transformations,
                             ResourcePrefix = v.ResourcePrefix,
-                            Path = v.Path                            
+                            Path = v.Path
                         })));
         }
 
@@ -112,27 +122,27 @@ namespace Pulumi.Kubernetes.Helm
                 new ChartFetchArgsUnwrap
                 {
                     Version = vs.Item1[0],
-                    CAFile = vs.Item1[1], 
-                    CertFile = vs.Item1[2], 
-                    KeyFile = vs.Item1[3], 
-                    Destination = vs.Item1[4], 
-                    Keyring = vs.Item1[5], 
-                    Password = vs.Item1[6], 
-                    Repo = vs.Item1[7], 
-                    UntarDir = vs.Item1[8], 
-                    Username = vs.Item1[9], 
-                    Home = vs.Item1[10], 
-                    Devel = vs.Item2[0], 
-                    Prov = vs.Item2[1], 
-                    Untar = vs.Item2[2], 
-                    Verify = vs.Item2[3] 
+                    CAFile = vs.Item1[1],
+                    CertFile = vs.Item1[2],
+                    KeyFile = vs.Item1[3],
+                    Destination = vs.Item1[4],
+                    Keyring = vs.Item1[5],
+                    Password = vs.Item1[6],
+                    Repo = vs.Item1[7],
+                    UntarDir = vs.Item1[8],
+                    Username = vs.Item1[9],
+                    Home = vs.Item1[10],
+                    Devel = vs.Item2[0],
+                    Prov = vs.Item2[1],
+                    Untar = vs.Item2[2],
+                    Verify = vs.Item2[3]
                 })!;
         }
 
         private static Input<T?> ToNullable<T>(this Input<T>? input) where T : class
-            => input != null ? input.Apply(v => (T?)v) : Output.Create((T?) null);
+            => input != null ? input.Apply(v => (T?)v) : Output.Create((T?)null);
 
         private static Input<bool?> ToNullable(this Input<bool>? input)
-            => input != null ? input.Apply(v => (bool?)v) : Output.Create((bool?) null);
+            => input != null ? input.Apply(v => (bool?)v) : Output.Create((bool?)null);
     }
 }
