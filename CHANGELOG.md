@@ -1,5 +1,9 @@
 ## HEAD (Unreleased)
 
+### Improvements
+
+-   Update .NET Helm v3 to use native client. (https://github.com/pulumi/pulumi-kubernetes/pull/1291)
+
 ## 2.5.1 (September 2, 2020)
 
 ### Bug Fixes
