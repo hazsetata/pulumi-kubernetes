@@ -265,7 +265,7 @@ func writeDotnetClient(pkg *schema.Package, outdir, templateDir string) {
 	})
 	overlays := map[string][]byte{
 		"ApiExtensions/CustomResource.cs": mustLoadFile(filepath.Join(templateDir, "apiextensions", "CustomResource.cs")),
-		"Helm/ChartBase.cs":               mustLoadFile(filepath.Join(templateDir, "helm", "ChartBase.cs")),
+		"Helm/ChartArgs.cs":               mustLoadFile(filepath.Join(templateDir, "helm", "ChartArgs.cs")),
 		"Helm/Unwraps.cs":                 mustLoadFile(filepath.Join(templateDir, "helm", "Unwraps.cs")),
 		"Helm/V2/Chart.cs":                mustLoadFile(filepath.Join(templateDir, "helm", "v2", "Chart.cs")),
 		"Helm/V3/Chart.cs":                mustLoadFile(filepath.Join(templateDir, "helm", "v3", "Chart.cs")),
